@@ -8,8 +8,16 @@ WORKDIR /app
 
 COPY requirements.txt ./
 RUN python -m pip install --upgrade pip \
-    && pip install -r requirements.txt
+    && pip install -r requirements.txt \
+    && addgroup --system app \
+    && adduser --system --ingroup app app
 
-COPY . .
+COPY src ./src
+COPY tests ./tests
+COPY CONTEXT_RULES.md ./CONTEXT_RULES.md
+COPY specs ./specs
 
-CMD ["python", "-m", "pytest", "tests/test_harness.py", "-v"]
+RUN chown -R app:app /app
+USER app
+
+CMD ["python", "-m", "pytest", "tests/test_harness.py", "-v", "-p", "no:cacheprovider"]

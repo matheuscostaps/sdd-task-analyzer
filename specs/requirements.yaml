@@ -24,3 +24,8 @@ governance:
   context_rules: CONTEXT_RULES.md
   human_homologation_required: true
   ai_generated_code_must_be_reviewed: true
+security:
+  workflow_permissions: contents_read
+  docker_non_root: true
+  docker_network_disabled: true
+  docker_read_only: true

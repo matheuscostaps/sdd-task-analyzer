@@ -53,3 +53,11 @@ Quando o enunciado da Fase 2 explicitar um requisito operacional de teste que co
 - O container deve executar os testes como comportamento padrão de validação desta entrega.
 - Falha no pytest, no GitHub Actions ou no ambiente Docker bloqueia a homologação final.
 - A IA não pode alterar o contrato para fazer os testes passarem; qualquer conflito deve ser resolvido por revisão humana do SDD, do enunciado e das CONTEXT_RULES.
+
+## 6. Regras de ouro para CI/CD e Docker
+
+- Não mascarar falhas com `continue-on-error`, `|| true`, `pytest -k` seletivo ou `skip` adicionado para tornar o build verde.
+- O workflow deve usar permissões mínimas (`contents: read`) e não deve versionar segredos ou tokens.
+- A validação Docker deve executar a mesma suíte do Test Harness, sem alterar `src/` ou `tests/` para adaptar o comportamento ao container.
+- O container deve executar como usuário não-root, sem acesso de rede durante os testes e com sistema de arquivos somente leitura quando possível.
+- Qualquer falha no job de pytest ou no job Docker bloqueia a homologação e o merge.

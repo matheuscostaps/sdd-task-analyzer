@@ -1,9 +1,11 @@
 .git
 .github
-.pytest_cache
-__pycache__
+__pycache__/
+.pytest_cache/
 *.pyc
-.venv
-venv
-*.zip
+*.pyo
+*.pyd
+venv/
+.venv/
 *.docx
+*.zip

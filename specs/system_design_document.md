@@ -19,8 +19,9 @@ O TaskAnalyzer é um módulo Python que analisa tarefas em memória e produz mé
 2. A IA só pode gerar ou alterar código dentro das CONTEXT_RULES.
 3. O Test Harness verifica os cenários e casos de borda.
 4. O GitHub Actions repete a validação automaticamente em push e Pull Request.
-5. O Docker executa a mesma suíte em ambiente isolado e reproduzível.
-6. A homologação humana precede a integração na branch principal.
+5. Um segundo job do workflow constrói a imagem Docker e executa a mesma suíte dentro do container.
+6. O Docker opera como usuário não-root, sem rede durante os testes e com sistema de arquivos somente leitura.
+7. A homologação humana precede a integração na branch principal.
 
 ## 4. Critérios de aceite final
 

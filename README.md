@@ -1,5 +1,7 @@
 # sdd-task-analyzer
 
+[![TaskAnalyzer CI](https://github.com/matheuscostaps/sdd-task-analyzer/actions/workflows/ci.yml/badge.svg)](https://github.com/matheuscostaps/sdd-task-analyzer/actions/workflows/ci.yml)
+
 Projeto cumulativo do **Bootcamp III** baseado em Spec-Driven Development (SDD), Test Harness, governança de contexto para IA, CI/CD e containerização.
 
 ## Objetivo
@@ -58,7 +60,8 @@ O workflow `.github/workflows/ci.yml` é disparado em `push` e `pull_request` pa
 1. faz checkout do código;
 2. configura Python 3.11;
 3. instala as dependências de `requirements.txt`;
-4. executa `python -m pytest tests/test_harness.py -v`.
+4. executa `python -m pytest tests/test_harness.py -v`;
+5. em um segundo job, constrói a imagem Docker e executa a mesma suíte dentro do container.
 
 ## Docker
 
@@ -75,7 +78,7 @@ Ou com Docker Compose:
 docker compose up --build --abort-on-container-exit
 ```
 
-A imagem utiliza `python:3.11-slim`, mantendo o ambiente isolado e reproduzível.
+A imagem utiliza `python:3.11-slim`, executa como usuário não-root e o Compose roda sem rede e com sistema de arquivos somente leitura, reforçando isolamento e reprodutibilidade.
 
 ## Governança de IA
 
