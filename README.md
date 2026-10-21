@@ -1,85 +1,93 @@
 # sdd-task-analyzer
 
-Projeto da **Fase 2 do Bootcamp III**: implementação do TaskAnalyzer orientada por especificação (SDD), governança de contexto para IA e validação por Test Harness com `pytest`.
+[![TaskAnalyzer CI](https://github.com/matheuscostaps/sdd-task-analyzer/actions/workflows/ci.yml/badge.svg)](https://github.com/matheuscostaps/sdd-task-analyzer/actions/workflows/ci.yml)
+
+Projeto cumulativo do **Bootcamp III** baseado em Spec-Driven Development (SDD), Test Harness, governança de contexto para IA, CI/CD e containerização.
 
 ## Objetivo
 
-Analisar tarefas em memória e produzir métricas de produtividade, incluindo totais, tempo médio de conclusão e taxa de atraso, preservando o contrato técnico definido na Fase 1 e as clarificações obrigatórias da Fase 2.
+Analisar tarefas em memória e produzir métricas de produtividade, preservando o contrato técnico definido pelo SDD. A Fase 3 acrescenta automação de testes com GitHub Actions, execução reproduzível via Docker e governança ética com homologação humana.
 
-## Estrutura
+## Estrutura final
 
 ```text
 sdd-task-analyzer/
-├── README.md
-├── CONTEXT_RULES.md
+├── .github/
+│   └── workflows/
+│       └── ci.yml
+├── Dockerfile
+├── docker-compose.yml
+├── .dockerignore
 ├── .gitignore
-├── requirements.txt
+├── CONTEXT_RULES.md
 ├── specs/
-│   └── task_analyzer_spec.md
+│   ├── task_analyzer_spec.md
+│   ├── system_design_document.md
+│   ├── system_design_document.pdf
+│   └── requirements.yaml
 ├── tests/
 │   └── test_harness.py
-└── src/
-    └── task_analyzer.py
+├── src/
+│   ├── __init__.py
+│   └── task_analyzer.py
+├── requirements.txt
+└── README.md
 ```
 
 ## Requisitos
 
 - Python 3.11+
-- pytest 8.x
+- pytest
+- Docker + Docker Compose (para validação containerizada)
 
-## Instalação
+## Testes locais
 
 ```bash
-python -m venv .venv
-```
-
-No Windows PowerShell:
-
-```powershell
-.\.venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
+python -m pytest tests/test_harness.py -v
 ```
 
-No Linux/macOS:
-
-```bash
-source .venv/bin/activate
-python -m pip install -r requirements.txt
-```
-
-## Executar testes
-
-Na raiz do projeto:
-
-```bash
-python -m pytest -q
-```
-
-Resultado esperado desta versão:
+Resultado esperado:
 
 ```text
 8 passed
 ```
 
-## Contrato e governança
+## CI/CD - GitHub Actions
 
-Antes de solicitar alterações a um assistente de IA, devem ser fornecidos como contexto:
+O workflow `.github/workflows/ci.yml` é disparado em `push` e `pull_request` para `main` e `develop`. Ele:
+
+1. faz checkout do código;
+2. configura Python 3.11;
+3. instala as dependências de `requirements.txt`;
+4. executa `python -m pytest tests/test_harness.py -v`;
+5. em um segundo job, constrói a imagem Docker e executa a mesma suíte dentro do container.
+
+## Docker
+
+Build e execução direta:
+
+```bash
+docker build -t sdd-task-analyzer .
+docker run --rm sdd-task-analyzer
+```
+
+Ou com Docker Compose:
+
+```bash
+docker compose up --build --abort-on-container-exit
+```
+
+A imagem utiliza `python:3.11-slim`, executa como usuário não-root e o Compose roda sem rede e com sistema de arquivos somente leitura, reforçando isolamento e reprodutibilidade.
+
+## Governança de IA
+
+Antes de qualquer geração ou alteração de código por IA, devem ser fornecidos:
 
 - `CONTEXT_RULES.md`
 - `specs/task_analyzer_spec.md`
 
-O código só deve ser homologado após a execução bem-sucedida de toda a suíte de testes e revisão humana de aderência ao contrato.
-
-## Estratégia Git/GitHub
-
-Branches preparadas no histórico local:
-
-- `main`
-- `feature/sdd-specification`
-- `feature/task-analyzer-impl`
-- `feature/test-harness`
-
-A branch `feature/test-harness` deve ser enviada ao GitHub e utilizada para abrir o Pull Request obrigatório para `main`. Após revisão humana e confirmação dos testes, o PR pode ser merged.
+A aprovação final depende de Test Harness 100% aprovado e revisão humana crítica (Critical-in-the-Loop).
 
 ## Autor
 

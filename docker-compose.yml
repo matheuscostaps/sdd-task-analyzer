@@ -1,0 +1,12 @@
+services:
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: sdd-task-analyzer:phase3
+    pull_policy: build
+    command: python -m pytest tests/test_harness.py -v -p no:cacheprovider
+    network_mode: none
+    read_only: true
+    tmpfs:
+      - /tmp

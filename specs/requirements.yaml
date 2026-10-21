@@ -1,0 +1,31 @@
+project: sdd-task-analyzer
+phase: 3
+runtime:
+  language: python
+  version: ">=3.11"
+quality:
+  test_framework: pytest
+  expected_result: "100% passed"
+  test_command: "python -m pytest tests/test_harness.py -v"
+ci_cd:
+  provider: github_actions
+  triggers:
+    - push
+    - pull_request
+  protected_targets:
+    - main
+    - develop
+container:
+  engine: docker
+  base_image: python:3.11-slim
+  compose_service: test
+governance:
+  specification: specs/task_analyzer_spec.md
+  context_rules: CONTEXT_RULES.md
+  human_homologation_required: true
+  ai_generated_code_must_be_reviewed: true
+security:
+  workflow_permissions: contents_read
+  docker_non_root: true
+  docker_network_disabled: true
+  docker_read_only: true
